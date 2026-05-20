@@ -3,104 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Open Source Merge Cube - Training Mode</title>
-    
-    <!-- Load MindAR (AR Library) -->
-    <script src="https://cdn.jsdelivr.net/npm/@mind-ar-js@1.2.2/dist/mindar-face-aframe.prod.js"></script>
-    <!-- Load A-Frame -->
+    <title>Test Camera</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mind-ar-js@1.2.2/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-
-    <style>
-        body { margin: 0; overflow: hidden; background: #000; }
-        #ui-layer {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: white;
-            font-family: sans-serif;
-            text-shadow: 0 0 5px black;
-            pointer-events: none;
-            z-index: 10;
-        }
-        #status {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #00ff00;
-        }
-        #next-btn {
-            pointer-events: auto;
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none; /* Hidden until training is done */
-        }
-    </style>
 </head>
 <body>
-
-    <!-- 
-      MindAR Scene:
-      imageTargetSrc: We will use a placeholder, but MindAR will overwrite this 
-      with the trained marker file if it exists.
-    -->
-    <a-scene mindar-image="imageTargetSrc: ./marker.mind;" color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-        
-        <!-- Camera -->
+    <a-scene mindar-image="imageTargetSrc: ./marker.mind;" embedded>
         <a-entity camera></a-entity>
-
-        <!-- The 3D Object (Solar System) -->
         <a-entity mindar-image-target="id: solar-system">
-            <a-entity position="0 0 0" rotation="-90 0 0">
-                <a-sphere position="0 0 0" radius="1.5" color="#FFD700" material="emissive: #FFD700; emissiveIntensity: 0.8"></a-sphere>
-                <a-entity position="4 0 0">
-                    <a-sphere position="0 0 0" radius="0.8" color="#2E86C1"></a-sphere>
-                    <a-sphere position="2 0 0" radius="0.3" color="#95A5A6"></a-sphere>
-                    <a-ring position="0 0 0" radius-inner="0.9" radius-outer="0.9" color="#2E86C1" rotation="90 0 0"></a-ring>
-                    <a-ring position="2 0 0" radius-inner="0.4" radius-outer="0.4" color="#95A5A6" rotation="90 0 0"></a-ring>
-                    <a-entity animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
-                        <a-entity animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear"></a-entity>
-                    </a-entity>
-                </a-entity>
-            </a-entity>
+            <a-plane position="0 0 0" width="2" height="2" color="red"></a-plane>
         </a-entity>
-
     </a-scene>
-
-    <div id="ui-layer">
-        <h2>Open Source Merge Cube</h2>
-        <div id="status">Initializing Camera...</div>
-        <button id="next-btn" onclick="nextSide()">Next Side (Side 2)</button>
-    </div>
-
-    <script>
-        // Simple Logic to switch between sides
-        let currentSide = 1;
-        const statusDiv = document.getElementById('status');
-        const nextBtn = document.getElementById('next-btn');
-
-        // When the scene loads
-        document.querySelector('a-scene').addEventListener('loaded', () => {
-            statusDiv.innerText = "Training Mode: Hold Side 1 QR Code";
-            statusDiv.style.color = "yellow";
-        });
-
-        // Function to switch to the next side
-        function nextSide() {
-            currentSide++;
-            statusDiv.innerText = `Training Mode: Hold Side ${currentSide} QR Code`;
-            statusDiv.style.color = "yellow";
-            nextBtn.style.display = "none";
-            
-            // Update the scene to look for the new marker
-            const scene = document.querySelector('a-scene');
-            scene.setAttribute('mindar-image', 'imageTargetSrc', `./side${currentSide}.mind`);
-        }
-    </script>
 </body>
 </html>
